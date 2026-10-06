@@ -1,7 +1,7 @@
 {
   "name": "santa-elena-conectada",
   "productName": "Santa Elena de la Cruz",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "Santa Elena de la Cruz conectada al sistema parroquial, con actualizaciones desde GitHub",
   "author": "Administración parroquial Santa Elena de la Cruz",
