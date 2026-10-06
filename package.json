@@ -1,14 +1,14 @@
 {
   "name": "santa-elena-conectada",
   "productName": "Santa Elena de la Cruz",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "description": "Santa Elena de la Cruz conectada al sistema parroquial, con actualizaciones desde GitHub",
   "author": "Administración parroquial Santa Elena de la Cruz",
   "main": "app/main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test tests/policy.test.cjs tests/updates.test.cjs",
+    "test": "node --test tests/*.test.cjs",
     "build:win": "electron-builder --win nsis --x64 --publish never",
     "build:mac": "electron-builder --mac dmg zip --x64 --arm64 --publish never",
     "build:dir": "electron-builder --dir --publish never"
@@ -46,7 +46,7 @@
           ]
         }
       ],
-      "icon": "app/logo.png",
+      "icon": "assets/logo.ico",
       "artifactName": "Santa-Elena-Instalador-${version}-${arch}.${ext}"
     },
     "nsis": {
@@ -60,14 +60,17 @@
       "installerLanguages": [
         "es_ES"
       ],
-      "language": "3082"
+      "language": "3082",
+      "installerIcon": "assets/logo.ico",
+      "uninstallerIcon": "assets/logo.ico",
+      "installerHeaderIcon": "assets/logo.ico"
     },
     "mac": {
       "target": [
         "dmg",
         "zip"
       ],
-      "icon": "app/logo.png",
+      "icon": "assets/logo.icns",
       "category": "public.app-category.business",
       "artifactName": "Santa-Elena-${version}-mac-${arch}.${ext}",
       "hardenedRuntime": true,

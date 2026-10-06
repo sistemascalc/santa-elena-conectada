@@ -7,6 +7,7 @@ const config = require('./config.cjs');
 const {sameOrigin, allowedRequest, safeFilename} = require('./policy.cjs');
 const {startUpdates, RELEASES} = require('./updates.cjs');
 const buildInfo = require('./build-info.json');
+const {createPrinting}=require('./printing.cjs');
 
 app.setName(config.name);
 app.setAppUserModelId('org.santaelena.conectada');
@@ -16,7 +17,7 @@ fs.mkdirSync(profile, {recursive: true, mode: 0o700});
 app.setPath('userData', profile);
 app.enableSandbox();
 const fallback = pathToFileURL(path.join(__dirname, 'offline.html')).href;
-let win, loading = false, updates;
+let win, loading = false, updates, printing;
 
 if (!app.requestSingleInstanceLock()) app.quit();
 else {
@@ -81,7 +82,10 @@ async function start() {
   });
   win.webContents.on('will-attach-webview', event => event.preventDefault());
   win.webContents.on('dom-ready', () => {
-    if (website()) win.webContents.insertCSS('#install-app{display:none!important}').catch(() => {});
+    if (website()) {
+      win.webContents.insertCSS('#install-app{display:none!important}').catch(() => {});
+      win.webContents.executeJavaScript(`window.print=()=>window.santaPrinting.print()`).catch(() => {});
+    }
   });
   win.webContents.on('page-title-updated', event => { event.preventDefault(); win.setTitle(config.name); });
   win.webContents.on('render-process-gone', () => {
@@ -90,6 +94,14 @@ async function start() {
   ipcMain.handle('santa:retry', event => {
     if (event.sender !== win?.webContents || event.senderFrame !== win.webContents.mainFrame || event.senderFrame.url !== fallback) throw Error('Solicitud no permitida');
     return loadSystem();
+  });
+  printing=createPrinting({app,BrowserWindow,dialog,win,origin:config.origin});
+  ipcMain.handle('santa:printers:get',printing.getSettings);
+  ipcMain.handle('santa:printers:save',printing.saveSettings);
+  ipcMain.handle('santa:print',printing.print);
+  ipcMain.handle('santa:printers:open',event=>{
+    if(event.sender!==win.webContents||event.senderFrame!==win.webContents.mainFrame||!sameOrigin(event.senderFrame.url,config.origin))throw Error('Solicitud no permitida');
+    printing.openSettings();
   });
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu()));
   win.once('ready-to-show', () => win.show());
@@ -129,10 +141,7 @@ function menu() {
     ]},
     {label:'Edición', submenu:[{role:'undo',label:'Deshacer'}, {role:'redo',label:'Rehacer'}, {type:'separator'}, {role:'cut',label:'Cortar'}, {role:'copy',label:'Copiar'}, {role:'paste',label:'Pegar'}, {role:'selectAll',label:'Seleccionar todo'}]},
     {label:'Vista', submenu:[{role:'resetZoom',label:'Tamaño original'}, {role:'zoomIn',label:'Acercar'}, {role:'zoomOut',label:'Alejar'}, {role:'togglefullscreen',label:'Pantalla completa'}]},
-    {label:'Impresión', submenu:[{label:'Impresoras disponibles', click:async () => {
-      const printers = await win.webContents.getPrintersAsync();
-      info('Impresoras de esta computadora', printers.length ? printers.map(p => (p.displayName || p.name) + (p.isDefault ? ' (predeterminada)' : '')).join('\n') + '\n\nSelecciona Imprimir recibo en la venta. El cuadro del sistema permite elegir la impresora.' : 'No se encontraron impresoras. Instala la impresora desde la configuración de Windows o Mac.');
-    }}, {label:'Formato del recibo', click:() => info('Recibos de Santa Elena', 'Papel de 80 mm, recibo de 72 mm y margen interior de 1 mm. Usa escala 100 % y verifica el resultado con tu impresora. Para imprimir, abre el recibo y pulsa Imprimir recibo.')} ]},
+    {label:'Impresión', submenu:[{label:'Seleccionar impresoras por apartado',click:()=>printing.openSettings()}]},
     {label:'Ayuda', submenu:[{label:'Buscar actualizaciones',click:()=>showUpdates(true)},
       {id:'update-state',label:'Estado de las actualizaciones',click:()=>showUpdates(false)},
       {type:'separator'},

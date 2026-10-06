@@ -57,3 +57,11 @@ Compila Windows en Windows y Mac en macOS, como hace el flujo de GitHub Actions.
 Los equipos consultan el mismo servidor por HTTPS. Usa **Actualizar datos** para ver cambios de otros equipos. Antes de trabajar sin internet, inicia sesión y abre caja con conexión, y espera el aviso de preparación del dispositivo. Las ventas pendientes se envían al reconectar; los conflictos de cupo, horario, precio o saldo requieren revisión. No borres el perfil si hay ventas pendientes.
 
 Actualizar la aplicación no ejecuta migraciones ni reemplaza el servidor de la parroquia.
+
+## Impresoras por apartado (1.2.0)
+
+En Ventas, Agenda o Intenciones pulsa **Seleccionar impresora**, o abre **Impresión → Seleccionar impresoras por apartado**. Guarda la impresora de tickets y otra para las hojas de Agenda e Intenciones. La elección se guarda en `printers.json` dentro del perfil local de cada computadora. Se usan los nombres de dispositivo del sistema; si falta la impresora elegida, se avisa y no se envía a otra.
+
+Tickets: rollos de 80 o 58 mm, contenido de 72 o 48 mm centrado para respetar el área física de impresión, sin márgenes de página, con alto ajustado al contenido y logotipo compacto. Hojas: Carta o A4, con 8 mm interiores. El controlador debe tener instalado el tamaño correcto del rollo y la opción de corte automático si la impresora lo admite. No se ha probado físicamente cada modelo. Las preferencias son de la app de escritorio; las tablets usan la impresión del navegador.
+
+Los documentos se copian a una ventana de impresión aislada, sin controles de la aplicación. Solo el origen autorizado y el marco principal pueden solicitar impresión. Las ventanas de ajustes tienen un puente separado.
