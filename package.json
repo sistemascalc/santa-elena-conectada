@@ -1,0 +1,86 @@
+{
+  "name": "santa-elena-conectada",
+  "productName": "Santa Elena de la Cruz",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Santa Elena de la Cruz conectada al sistema parroquial, con actualizaciones desde GitHub",
+  "author": "Administración parroquial Santa Elena de la Cruz",
+  "main": "app/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/policy.test.cjs tests/updates.test.cjs",
+    "build:win": "electron-builder --win nsis --x64 --publish never",
+    "build:mac": "electron-builder --mac dmg zip --x64 --arm64 --publish never",
+    "build:dir": "electron-builder --dir --publish never"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "electron-updater": "6.6.2"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "org.santaelena.conectada",
+    "productName": "Santa Elena de la Cruz",
+    "asar": true,
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets",
+      "app": "."
+    },
+    "files": [
+      "app/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "app/logo.png",
+      "artifactName": "Santa-Elena-Instalador-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Santa Elena de la Cruz",
+      "deleteAppDataOnUninstall": false,
+      "installerLanguages": [
+        "es_ES"
+      ],
+      "language": "3082"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "app/logo.png",
+      "category": "public.app-category.business",
+      "artifactName": "Santa-Elena-${version}-mac-${arch}.${ext}",
+      "hardenedRuntime": true,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "sistemascalc",
+        "repo": "santa-elena-conectada",
+        "releaseType": "release"
+      }
+    ]
+  }
+}

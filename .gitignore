@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+entrega/
+instalador/payload.zip
+*.syso
+*.log
+*.sqlite*
+*.p12
+*.pfx
+*.pem
+*.key
+.env*
+.DS_Store
+vista-datos/
+coverage/

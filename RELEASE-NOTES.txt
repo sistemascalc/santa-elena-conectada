@@ -1,0 +1,18 @@
+Santa Elena de la Cruz · Aplicación conectada
+
+Usa la misma información y las cuentas del sitio de la parroquia.
+
+Windows: descarga el instalador .exe. Esta versión incorpora actualizaciones
+desde GitHub: se descargan en segundo plano y se instalan al cerrar la aplicación.
+La versión 1.0.0 anterior necesita esta instalación inicial una sola vez.
+La sesión y las ventas pendientes conservan su carpeta Santa Elena Conectada.
+
+Mac: descarga el .dmg para tu arquitectura (arm64: M1 y posteriores; x64: Intel).
+Ayuda > Buscar actualizaciones consulta GitHub. La instalación automática en Mac
+solo se habilita en paquetes con firma de Apple; sin certificados se ofrece la
+descarga para reemplazar la app manualmente. No se deshabilitan esas verificaciones.
+
+Tablets: siguen usando la aplicación instalable del sitio, con el mismo servidor.
+
+El sitio publicado y los datos parroquiales no se incluyen ni se modifican al
+publicar estos instaladores. Las mejoras del sitio llegan al reabrir la app.
