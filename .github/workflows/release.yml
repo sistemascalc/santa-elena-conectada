@@ -75,7 +75,12 @@ jobs:
         run: |
           node -e "const names=['MAC_CSC_LINK','MAC_CSC_KEY_PASSWORD','APPLE_ID','APPLE_APP_SPECIFIC_PASSWORD','APPLE_TEAM_ID'];const n=names.filter(k=>process.env[k]).length;if(n&&n!==names.length)throw Error('Completa todos los secretos de firma y notarización');require('fs').writeFileSync('app/build-info.json',JSON.stringify({macSigned:n===names.length}));"
       - name: Compilar paquetes
-        run: ${{ matrix.command }}
+        shell: bash
+        run: |
+          for variable in CSC_LINK CSC_KEY_PASSWORD APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID; do
+            if [ -z "${!variable}" ]; then unset "$variable"; fi
+          done
+          ${{ matrix.command }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ${{ matrix.platform == 'mac' && secrets.MAC_CSC_LINK || secrets.WIN_CSC_LINK }}
